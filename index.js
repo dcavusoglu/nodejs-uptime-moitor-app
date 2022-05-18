@@ -6,13 +6,52 @@
 
 // Dependencies
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
+const fs = require('fs');
+const _data = require('./lib/data');
 
 
-// The server should respond to all requests with a string
-const server = http.createServer(function(req,res){
+//TESTING
+_data.create('test', 'newFile', {'hey' : 'yey'}, function(err){
+  console.log('Error: ', err);
+});
+
+
+// Instantiating the http server
+const httpServer = http.createServer(function(req,res){
+  unifiedServer(req,res);
+});
+
+// Starting the http server
+httpServer.listen(config.httpPort, function(){
+  console.log("The server is listening on post "+config.httpPort+" now");
+})
+
+
+
+// Instantiating the https server
+const httpsServerOptions = {
+  'key' : fs.readFileSync('./https/key.pem'),
+  'cert': fs.readFileSync('./https/cert.pem')
+}
+
+const httpsServer = https.createServer(httpsServerOptions, function(req,res){
+  unifiedServer(req,res);
+});
+
+
+// Starting the https server
+httpsServer.listen(config.httpsPort, function(){
+  console.log("The server is listening on post "+config.httpsPort+" now");
+});
+
+
+
+// All the server logic http and https
+const unifiedServer = function(req, res) {
 
   // Get the url
   const parsedUrl = url.parse(req.url,true);
@@ -70,20 +109,17 @@ const server = http.createServer(function(req,res){
       // Log the request path
       console.log('Returning this response: ', statusCode, payloadString);
 
-    })
+    });
 
   });
-});
+}
 
-server.listen(config.port, function(){
-  console.log("The server is listening on post "+config.port+" in "+config.envName+" mode now");
-})
-
+// Define handlers
 const handlers = {};
 
-handlers.sample = function(data, callback){
+handlers.ping = function(data, callback){
   // Callback a HTTP status code and a payload
-  callback(406,{'name': 'sample_handler'});
+  callback(200);
 };
 
 handlers.notFound = function (data, callback) {
@@ -91,7 +127,7 @@ handlers.notFound = function (data, callback) {
 };
 
 const router = {
-  'sample' : handlers.sample
+  'ping' : handlers.ping
 };
 
 console.log('Hello Duygu!');
