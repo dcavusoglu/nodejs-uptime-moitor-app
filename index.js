@@ -15,7 +15,7 @@ const _data = require('./lib/data');
 
 
 //TESTING
-_data.create('test', 'newFile', {'hey' : 'yey'}, function(err){
+_data.delete('test', 'newFile', function(err){
   console.log('Error: ', err);
 });
 
