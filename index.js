@@ -8,6 +8,8 @@
 const http = require('http');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
+const config = require('./config');
+
 
 // The server should respond to all requests with a string
 const server = http.createServer(function(req,res){
@@ -61,6 +63,7 @@ const server = http.createServer(function(req,res){
       const payloadString = JSON.stringify(payload);
 
       // Return the string
+      res.setHeader('Content-Type', 'application/json');
       res.writeHead(statusCode);
       res.end(payloadString);
 
@@ -72,8 +75,8 @@ const server = http.createServer(function(req,res){
   });
 });
 
-server.listen(3000, function(){
-  console.log('The server is listening on post 3000 now');
+server.listen(config.port, function(){
+  console.log("The server is listening on post "+config.port+" in "+config.envName+" mode now");
 })
 
 const handlers = {};
