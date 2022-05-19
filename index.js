@@ -12,6 +12,7 @@ const StringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
 const fs = require('fs');
 const _data = require('./lib/data');
+const handlers = require('./lib/handlers');
 
 
 //TESTING
@@ -114,20 +115,10 @@ const unifiedServer = function(req, res) {
   });
 }
 
-// Define handlers
-const handlers = {};
-
-handlers.ping = function(data, callback){
-  // Callback a HTTP status code and a payload
-  callback(200);
-};
-
-handlers.notFound = function (data, callback) {
-  callback(404);
-};
 
 const router = {
-  'ping' : handlers.ping
+  'ping' : handlers.ping,
+  'users' : handlers.users
 };
 
 console.log('Hello Duygu!');

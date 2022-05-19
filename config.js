@@ -10,14 +10,16 @@ var environments = {};
 environments.staging = {
   'httpPort' : 3000,
   'httpsPort' : 3001,
-  'envName' : 'staging'
+  'envName' : 'staging',
+  'hashingSecret' : 'thisIsASecret'
 };
 
 // Production environment
 environments.production = {
   'httpPort' : 5500,
   'httpsPort' : 5501,
-  'envName' : 'production'
+  'envName' : 'production',
+  'hashingSecret' : 'thisIsASecret'
 };
 
 
